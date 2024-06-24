@@ -8,7 +8,7 @@ const Users = () => {
   const [answer, setAnswer] = useState('');
   const [answerError, setAnswerError] = useState('');
   const [answerResponse, setAnswerResponse] = useState('');
-  const baseUrl = process.env.REACT_APP_BACKEND_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
     if (!isMounted.current) {

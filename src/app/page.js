@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const baseUrl = process.env.REACT_APP_BACKEND_URL;
+  const baseUrl = process.env.REACT_APP_NEXT_BASE_URL;
   const router = useRouter();
   const handleClick = () => {
     router.push("/equation");
