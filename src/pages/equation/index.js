@@ -64,6 +64,7 @@ const Users = () => {
   const handleNext = () => {
     setAnswerError('');
     setAnswerResponse('');
+    setAnswer('');
     fetchSums();
   };
   
@@ -95,6 +96,7 @@ const Users = () => {
             <button
             className="text-white bg-green-700 hover:bg-green-800 rounded-lg text-sm px-2 py-1.5 dark:bg-green-600 dark:hover:bg-green-700"
             onClick={handleNext}
+            value={setAnswer}
             >
               Next</button>
           </div>
