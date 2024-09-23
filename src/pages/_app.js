@@ -1,27 +1,13 @@
-// pages/_app.js
-
 import { useEffect } from 'react';
-import { firebaseConfig } from '../lib/firebase'; // Import Firebase configuration
-import firebase from 'firebase/app';
-import 'firebase/auth'; // Include Firebase Authentication
-import '../styles/globals.css'; // Global styles
-
-// Initialize Firebase only once
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
+import { initializeApp, getApps } from 'firebase/app';
+import firebaseConfig from '../lib/firebase'; 
+import '../styles/globals.css';
 function MyApp({ Component, pageProps }) {
     useEffect(() => {
-        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                console.log('User is signed in:', user);
-            } else {
-                console.log('No user is signed in');
-            }
-        });
-
-        return () => unsubscribe();
+        // Initialize Firebase only if there are no apps already initialized
+        if (!getApps().length) {
+            initializeApp(firebaseConfig);
+        }
     }, []);
 
     return <Component {...pageProps} />;

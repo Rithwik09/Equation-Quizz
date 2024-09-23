@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import 'tailwindcss/tailwind.css';
+import { auth } from '../../lib/firebase'; 
 import { useRouter } from 'next/navigation';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const SignupPage = () => {
     const router = useRouter();
@@ -14,44 +16,67 @@ const SignupPage = () => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+    //     setError('');
+
+    //     try {
+    //         const response = await fetch('/auth/login', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 email,
+    //                 password,
+    //                 name,
+    //                 action: 'signup'
+    //             }),
+    //         });
+    //         // Check if the response is not OK
+    //         if (!response.ok) {
+    //             const errorMessage = `Error: ${response.status} ${response.statusText}`;
+    //             console.log(errorMessage);
+    //             console.error(errorMessage);
+    //             setError('Signup failed: ' + errorMessage);
+    //             return;
+    //         }
+    //         // Ensure the response is JSON
+    //         const data = await response.json();
+
+    //         if (data.success) {
+    //             router.push('/');
+    //         } else {
+    //             setError(data.message || 'Signup failed');
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //         console.error('Signup error:', error);
+    //         setError('An error occurred during signup');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
         try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                    name,
-                    action: 'signup'
-                }),
-            });
-            // Check if the response is not OK
-            if (!response.ok) {
-                const errorMessage = `Error: ${response.status} ${response.statusText}`;
-                console.log(errorMessage);
-                console.error(errorMessage);
-                setError('Signup failed: ' + errorMessage);
-                return;
-            }
-            // Ensure the response is JSON
-            const data = await response.json();
+            // Firebase auth signup
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-            if (data.success) {
-                router.push('/');
-            } else {
-                setError(data.message || 'Signup failed');
-            }
+            // You can optionally set displayName after the user is created
+            // await user.updateProfile({ displayName: name });
+
+            // Navigate to the desired page after successful signup
+            router.push('/');
         } catch (error) {
-            console.log(error);
-            console.error('Signup error:', error);
-            setError('An error occurred during signup');
+            console.error('Signup error:', error.message);
+            setError(error.message || 'Signup failed');
         } finally {
             setLoading(false);
         }
